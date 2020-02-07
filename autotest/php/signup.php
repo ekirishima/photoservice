@@ -6,7 +6,7 @@
         header("Content-type: application/json; charset=utf-8");
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url."/api/login");
+        curl_setopt($ch, CURLOPT_URL, $url."/api/signup");
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, true);
