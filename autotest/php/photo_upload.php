@@ -6,7 +6,7 @@
         header("Content-type: application/json; charset=utf-8");
 
         $photo = array();
-        if(isset($_REQUEST["photo"])) $photo = array('photo' => new CurlFile("../files/".$_REQUEST["photo"]));
+        if(isset($_REQUEST["photo"])) $photo = array('photo' => new CurlFile(realpath("../files/".$_REQUEST["photo"])));
 
         $ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url."/api/photo");

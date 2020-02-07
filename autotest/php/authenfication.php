@@ -28,7 +28,7 @@
             }
 
             // Send JSON data
-            return json_encode(array("name" => $name, "success" => $success, "code" => $httpCode, "response" => json_decode($body)));
+            return array("name" => $name, "success" => $success, "code" => $httpCode, "response" => json_decode($body));
         };
 
         echo json_encode(array(
