@@ -1,0 +1,6 @@
+[Fri Jan 31 02:39:14.608400 2020] [php7:warn] [pid 6190] [client 192.168.20.40:53848] PHP Warning:  explode() expects at least 2 parameters, 1 given in /home/jrfvzsfb-m1/public/index.php on line 3
+[Fri Jan 31 02:39:15.138227 2020] [php7:warn] [pid 6190] [client 192.168.20.40:53848] PHP Warning:  explode() expects at least 2 parameters, 1 given in /home/jrfvzsfb-m1/public/index.php on line 3
+[Fri Jan 31 02:39:15.340132 2020] [php7:warn] [pid 6190] [client 192.168.20.40:53848] PHP Warning:  explode() expects at least 2 parameters, 1 given in /home/jrfvzsfb-m1/public/index.php on line 3
+[Fri Jan 31 02:39:15.532511 2020] [php7:warn] [pid 6190] [client 192.168.20.40:53848] PHP Warning:  explode() expects at least 2 parameters, 1 given in /home/jrfvzsfb-m1/public/index.php on line 3
+[Fri Jan 31 02:39:15.741005 2020] [php7:warn] [pid 6190] [client 192.168.20.40:53848] PHP Warning:  explode() expects at least 2 parameters, 1 given in /home/jrfvzsfb-m1/public/index.php on line 3
+[Fri Jan 31 02:39:16.203857 2020] [php7:warn] [pid 6190] [client 192.168.20.40:53848] PHP Warning:  explode() expects at least 2 parameters, 1 given in /home/jrfvzsfb-m1/public/index.php on line 3

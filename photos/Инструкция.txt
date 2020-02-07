@@ -1,0 +1,9 @@
+Команда: 
+a2enmod headers - включение cors на сервер
+service apache2 restart - перезагрузить для сохранения.
+
+Залить папку photos в директорию html
+Настроить подключение к базе данных в директории .env
+Залить базу данных photos.sql 
+
+crown -R adminwsr:adminwsr /home/adminwsr/html/photos
