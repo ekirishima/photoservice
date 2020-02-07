@@ -40,6 +40,8 @@ app.start = async function () {
     if(!el.val()) return alert("Ошибка, домен не обнаружен.");
     app.domain = el.val();
     
+    // Начало работы.
+    await app.cors();
 
 };
 
@@ -70,7 +72,7 @@ app.cors = async function () {
 };
 
 // Не авторизованному пользователю не доступен функционал.
-app.authenfication = function () {
+app.authenfication = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Не авторизованному пользователю не доступен функционал.", "Отправка запроса");
         $.post("/php/authenfication.php", { url: app.domain }, (data) => {
@@ -96,7 +98,7 @@ app.authenfication = function () {
 };
 
 // Валидация регистрации без обязательных полей.
-app.signup_nodata = function () {
+app.signup_nodata = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация регистрации без обязательных полей.", "Отправка запроса");
         $.post("/php/signup.php", { url: app.domain }, (data) => {
@@ -134,7 +136,7 @@ app.signup_nodata = function () {
 };
 
 // Номер меньше 11 символов.
-app.signup_number_1 = function () {
+app.signup_number_1 = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация номер меньше 11 символов.", "Отправка запроса");
         $.post("/php/signup.php", { url: app.domain }, (data) => {
@@ -172,7 +174,7 @@ app.signup_number_1 = function () {
 };
 
 // Номер больше 11 символов.
-app.signup_number_2 = function () {
+app.signup_number_2 = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация номер больше 11 символов.", "Отправка запроса");
         $.post("/php/signup.php", { url: app.domain }, (data) => {
@@ -210,7 +212,7 @@ app.signup_number_2 = function () {
 };
 
 // Успешная регистрация
-app.signup_success = function (account) {
+app.signup_success = async function (account) {
     return new Promise(function(resolve, reject) {
         app.log("Успешная регистрация.", "Отправка запроса");
         $.post("/php/signup.php", { 
@@ -257,7 +259,7 @@ app.signup_success = function (account) {
 };
 
 // Валидация авторизации без обязательных полей.
-app.login_nodata = function () {
+app.login_nodata = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация авторизации без обязательных полей", "Отправка запроса");
         $.post("/php/login.php", { url: app.domain }, (data) => {
@@ -295,7 +297,7 @@ app.login_nodata = function () {
 };
 
 // Успешная авторизация 
-app.login_success = function (account) {
+app.login_success = async function (account) {
     return new Promise(function(resolve, reject) {
         app.log("Успешная авторизация", "Отправка запроса");
         $.post("/php/login.php", { url: app.domain, phone: app.accounts[account].phone, password: app.accounts[account].password }, (data) => {
@@ -336,7 +338,7 @@ app.login_success = function (account) {
 };
 
 // Успешный выход
-app.logout_success = function() {
+app.logout_success = async function() {
     return new Promise(function(resolve, reject) {
         app.log("Успешная выход", "Отправка запроса");
         $.post("/php/logout.php", { url: app.domain, header: app.accounts[0].token }, (data) => {
@@ -374,7 +376,7 @@ app.logout_success = function() {
 };
 
 // Валидация смены токена на выходе.
-app.logout_token = function() {
+app.logout_token = async function() {
     return new Promise(function(resolve, reject) {
         app.log("Валидация смены токена на выходе", "Отправка запроса");
         $.post("/php/logout.php", { url: app.domain, header: app.accounts[0].token }, (data) => {
@@ -434,7 +436,7 @@ app.users = function () {
 };
 
 // Валидация на обязательную загрузку фотографии.
-app.upload_nodata = function () {
+app.upload_nodata = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация на обязательную загрузку фотографии.", "Отправка запроса");
         $.post("/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token }, (data) => {
@@ -470,7 +472,7 @@ app.upload_nodata = function () {
 };
 
 // Загрузка фотографии другого типа.
-app.upload_txt = function () {
+app.upload_txt = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация на Загрузка фотографии другого типа.", "Отправка запроса");
         $.post("/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token, photo: "test.txt" }, (data) => {
@@ -506,7 +508,7 @@ app.upload_txt = function () {
 };
 
 // Успешная загрузка фотографии.
-app.upload_success = function () {
+app.upload_success = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Успешная загрузка фотографии.", "Отправка запроса");
         $.post("/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token, photo: "download.jpeg" }, (data) => {
@@ -533,7 +535,7 @@ app.upload_success = function () {
             </tr>`);
             
             app.photos.push(data.response.id);
-
+            
             app.log("Успешная загрузка фотографии. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);
         }).fail(() => {
@@ -544,7 +546,7 @@ app.upload_success = function () {
 };
 
 // Валидация метода на изменение фотографии.
-app.edit_method = function () {
+app.edit_method = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация метода на изменение фотографии.", "Отправка запроса");
         $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[1].token, id: photos[0] }, (data) => {
@@ -579,7 +581,7 @@ app.edit_method = function () {
 };
 
 // Редактирование фотографии другого пользователя.
-app.edit_noaccess = function () {
+app.edit_noaccess = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Редактирование фотографии другого пользователя.", "Отправка запроса");
         $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[2].token, id: photos[0], photo: { "_method": "patch" } }, (data) => {
@@ -614,7 +616,7 @@ app.edit_noaccess = function () {
 };
 
 // Успешное редактирование фотографии
-app.edit_success = function () {
+app.edit_success = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Успешное редактирование фотографии.", "Отправка запроса");
         $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[1].token, id: photos[0], 
@@ -646,6 +648,7 @@ app.edit_success = function () {
                 <td class="text-${ message_notify } font-weight-bold">${ message }</td>
             </tr>`);
 
+            app.photos_get();
             app.log("Успешное редактирование фотографии. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);
         }).fail(() => {
@@ -656,7 +659,7 @@ app.edit_success = function () {
 };
 
 // Получение всех фотографий. 
-app.photos = function () {
+app.photos_get = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Получение всех фотографий.", "Отправка запроса");
         $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[2].token, id: photos[0], photo: { "_method": "patch" } }, (data) => {
@@ -681,19 +684,11 @@ app.photos = function () {
 };
 
 // Удаление чужой фотографии.
-app.delete_noaccess = function () {
+app.delete_noaccess = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Удаление чужой фотографии.", "Отправка запроса");
-
-    });
-};
-
-// Успешное удаление фотографии.
-app.delete_success = function () {
-    return new Promise(function(resolve, reject) {
-        app.log("Успешное удаление фотографии.", "Отправка запроса");
         $.post("/php/photo_delete.php", { url: app.domain, header: app.accounts[2].token, id: photos[0] }, (data) => {
-            app.log("Валидация метода на изменение фотографии.", "Обработка запроса");
+            app.log("Удаление чужой фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
             if(data.code != 403) success = false;
@@ -709,32 +704,96 @@ app.delete_success = function () {
             $('.photodelete').append(`<tr>
                 <th scope="row">1</th>
                 <td>Валидация</td>
-                <td>Проверка метода</td>
+                <td>Удаление чужой фотографии</td>
+                <td>${ data.code }</td>
+                <td class="text-${ message_notify } font-weight-bold">${ message }</td>
+            </tr>`);
+            
+            app.log("Удаление чужой фотографии. код ответа " + data.code, JSON.stringify(data.response));
+            setTimeout(() => resolve(true), 2000);
+        }).fail(() => {
+            app.log("Удаление чужой фотографии.", "Ошибка отправки запроса. Необходима ручная проверка.");
+            resolve(false);
+        });
+    });
+};
+
+// Успешное удаление фотографии.
+app.delete_success = async function () {
+    return new Promise(function(resolve, reject) {
+        app.log("Успешное удаление фотографии.", "Отправка запроса");
+        $.post("/php/photo_delete.php", { url: app.domain, header: app.accounts[1].token, id: photos[0] }, (data) => {
+            app.log("Валидация успешное удаление фотографии.", "Обработка запроса");
+
+            let success = true, message_notify = "success", message = "Пройдено!";
+            if(data.code != 204) success = false;
+
+            // Ошибочное уведомление
+            if(!success) {
+                message_notify = "danger";
+                message = "Ошибка проверки";
+            }
+
+            // Проверка структуры
+
+            $('.photodelete').append(`<tr>
+                <th scope="row">2</th>
+                <td>Удаление</td>
+                <td>Успешное удаление фотографии.</td>
                 <td>${ data.code }</td>
                 <td class="text-${ message_notify } font-weight-bold">${ message }</td>
             </tr>`);
 
-            app.log("Валидация метода на изменение фотографии. код ответа " + data.code, JSON.stringify(data.response));
+            app.photos_get();
+            app.log("Валидация успешное удаление фотографии. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);
         }).fail(() => {
-            app.log("Валидация метода на изменение фотографии.", "Ошибка отправки запроса. Необходима ручная проверка.");
+            app.log("Валидация успешное удаление фотографии.", "Ошибка отправки запроса. Необходима ручная проверка.");
             resolve(false);
         });
     });
 };
 
 // Шаринг фотографии другому пользователю.
-app.sharing = function () {
+app.sharing = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Шаринг фотографии другому пользователю.", "Отправка запроса");
+        $.post("/php/photo_delete.php", { url: app.domain, header: app.accounts[1].token, id: accounts[2].id, photos: app.photos }, (data) => {
+            app.log("Шаринг фотографии другому пользователю.", "Обработка запроса");
 
+            let success = true, message_notify = "success", message = "Пройдено!";
+            if(data.code != 201) success = false;
+
+            // Ошибочное уведомление
+            if(!success) {
+                message_notify = "danger";
+                message = "Ошибка проверки";
+            }
+
+           // Проверка структуры
+           for(var i in data.response) if(i != "existing_photos") status = false;
+
+            app.photos_get();
+            app.log("Шаринг фотографии другому пользователю. код ответа " + data.code, JSON.stringify(data.response));
+            setTimeout(() => resolve(true), 2000);
+        }).fail(() => {
+            app.log("Шаринг фотографии другому пользователю.", "Ошибка отправки запроса. Необходима ручная проверка.");
+            resolve(false);
+        });
     });
 };
 
 // Поиск пользователей.
-app.search = function () {
+app.search = async function (value) {
     return new Promise(function(resolve, reject) {
         app.log("Поиск пользователей.", "Отправка запроса");
-
+        $.post("/php/user_search.php", { url: domain, header: app.accounts[1].token, search: value }, (data) => {
+            app.log("Поиск пользователей.", "Обработка запроса");
+            app.log("Поиск пользователей. код ответа " + data.code, JSON.stringify(data.response));
+            setTimeout(() => resolve(true), 2000);
+        }).fail(() => {
+            app.log("Поиск пользователей.", "Ошибка отправки запроса. Необходима ручная проверка.");
+            resolve(false);
+        });
     });
 };
