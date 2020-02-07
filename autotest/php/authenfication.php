@@ -4,11 +4,7 @@
 
         header("Content-type: application/json; charset=utf-8");
 
-        $result = "success";
-
         function c_send($name, $url, $post = false, $fields = false) {
-            
-            global $result;
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $_REQUEST["url"].$url);
@@ -32,7 +28,7 @@
             }
 
             // Send JSON data
-            return json_encode(array("success" => $success, "code" => $httpCode, "response" => json_decode($body)));
+            return json_encode(array("name" => $name, "success" => $success, "code" => $httpCode, "response" => json_decode($body)));
         };
 
         echo json_encode(array(
@@ -43,8 +39,7 @@
             "photo.get" => c_send("Получение одной фотографии", "/api/photo/1", false),
             "photo.delete" => c_send("Удаление фотографии", "/api/photo/1", true, array("_method" => "delete")),
             "photo.share" => c_send("Шаринг фотографий", "/api/user/1/share", true),
-            "user.search" => c_send("Поиск пользователей", "/api/user", false),
-            "success" => $result
+            "user.search" => c_send("Поиск пользователей", "/api/user", false)
         ));
 
     } catch (\Throwable $th) {
