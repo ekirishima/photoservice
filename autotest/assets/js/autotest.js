@@ -59,6 +59,7 @@ app.start = async function () {
                 await app.upload_txt();
                 for(let i = 1; i <= 5; i ++) await app.upload_success();
                 if(!app.photos[0]) return alert("Фотографии не обнаружены, необходима ручная проверка.");
+                await app.photos_get();
                 setTimeout(async() => {
                     await app.edit_method();
                     await app.edit_noaccess();
@@ -67,7 +68,7 @@ app.start = async function () {
                     await app.delete_noaccess();
                     await app.delete_success();
                     await app.sharing();
-                    await app.search("Павел");
+                    await app.photos_get();
                 }, 2000);
             }, 2000);
         }, 2000);
@@ -82,7 +83,7 @@ app.cors = async function () {
     return new Promise(function(resolve, reject) {
         app.log("CORS", "Отправка запроса");
         $("#cors").html(`<div class="text-center alert alert-primary" role="alert">Отправка запроса.</div>`);
-        $.post("/php/cors.php", { url: app.domain }, (data) => {
+        $.post("/autotest/php/cors.php", { url: app.domain }, (data) => {
             if(data.success) {
                 app.log("cors", "Успешно получен.");
                 $("#cors").html(`<div class="text-center alert alert-success" role="alert">Успешно получен!</div>`);
@@ -104,7 +105,7 @@ app.cors = async function () {
 app.authenfication = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Не авторизованному пользователю не доступен функционал.", "Отправка запроса");
-        $.post("/php/authenfication.php", { url: app.domain }, (data) => {
+        $.post("/autotest/php/authenfication.php", { url: app.domain }, (data) => {
             app.log("Не авторизованному пользователю не доступен функционал.", "Успешное получение данных");
             for(let i in data) {
                 let status = { type: "success", message: "Пройдено!" };
@@ -131,7 +132,7 @@ app.authenfication = async function () {
 app.signup_nodata = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация регистрации без обязательных полей.", "Отправка запроса");
-        $.post("/php/signup.php", { url: app.domain }, (data) => {
+        $.post("/autotest/php/signup.php", { url: app.domain }, (data) => {
             
             app.log("Валидация регистрации без обязательных полей.", "Обработка запроса");
 
@@ -169,7 +170,7 @@ app.signup_nodata = async function () {
 app.signup_number_1 = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация номер меньше 11 символов.", "Отправка запроса");
-        $.post("/php/signup.php", { url: app.domain }, (data) => {
+        $.post("/autotest/php/signup.php", { url: app.domain }, (data) => {
             
             app.log("Валидация номер меньше 11 символов.", "Обработка запроса");
 
@@ -207,7 +208,7 @@ app.signup_number_1 = async function () {
 app.signup_number_2 = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация номер больше 11 символов.", "Отправка запроса");
-        $.post("/php/signup.php", { url: app.domain }, (data) => {
+        $.post("/autotest/php/signup.php", { url: app.domain }, (data) => {
             
             app.log("Валидация номер больше 11 символов.", "Обработка запроса");
 
@@ -245,7 +246,7 @@ app.signup_number_2 = async function () {
 app.signup_success = async function (account) {
     return new Promise(function(resolve, reject) {
         app.log("Успешная регистрация.", "Отправка запроса");
-        $.post("/php/signup.php", { 
+        $.post("/autotest/php/signup.php", { 
             url: app.domain,
             phone: app.accounts[account].phone,
             first_name: app.accounts[account].first_name,
@@ -292,7 +293,7 @@ app.signup_success = async function (account) {
 app.login_nodata = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация авторизации без обязательных полей", "Отправка запроса");
-        $.post("/php/login.php", { url: app.domain }, (data) => {
+        $.post("/autotest/php/login.php", { url: app.domain }, (data) => {
             
             app.log("Валидация авторизации без обязательных полей", "Обработка запроса");
 
@@ -330,7 +331,7 @@ app.login_nodata = async function () {
 app.login_success = async function (account) {
     return new Promise(function(resolve, reject) {
         app.log("Успешная авторизация", "Отправка запроса");
-        $.post("/php/login.php", { url: app.domain, phone: app.accounts[account].phone, password: app.accounts[account].password }, (data) => {
+        $.post("/autotest/php/login.php", { url: app.domain, phone: app.accounts[account].phone, password: app.accounts[account].password }, (data) => {
             
             app.log("Успешная авторизация", "Обработка запроса");
 
@@ -371,7 +372,7 @@ app.login_success = async function (account) {
 app.logout_success = async function() {
     return new Promise(function(resolve, reject) {
         app.log("Успешная выход", "Отправка запроса");
-        $.post("/php/logout.php", { url: app.domain, header: app.accounts[0].token }, (data) => {
+        $.post("/autotest/php/logout.php", { url: app.domain, header: app.accounts[0].token }, (data) => {
             
             app.log("Успешная выход", "Обработка запроса");
 
@@ -406,7 +407,7 @@ app.logout_success = async function() {
 app.logout_token = async function() {
     return new Promise(function(resolve, reject) {
         app.log("Валидация смены токена на выходе", "Отправка запроса");
-        $.post("/php/logout.php", { url: app.domain, header: app.accounts[0].token }, (data) => {
+        $.post("/autotest/php/logout.php", { url: app.domain, header: app.accounts[0].token }, (data) => {
             
             app.log("Валидация смены токена на выходе", "Обработка запроса");
 
@@ -465,7 +466,7 @@ app.users = function () {
 app.upload_nodata = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация на обязательную загрузку фотографии.", "Отправка запроса");
-        $.post("/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token }, (data) => {
+        $.post("/autotest/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token }, (data) => {
             app.log("Валидация на обязательную загрузку фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -501,7 +502,7 @@ app.upload_nodata = async function () {
 app.upload_txt = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация на Загрузка фотографии другого типа.", "Отправка запроса");
-        $.post("/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token, photo: "test.txt" }, (data) => {
+        $.post("/autotest/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token, photo: "test.txt" }, (data) => {
             app.log("Валидация на Загрузка фотографии другого типа.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -537,7 +538,7 @@ app.upload_txt = async function () {
 app.upload_success = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Успешная загрузка фотографии.", "Отправка запроса");
-        $.post("/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token, photo: "download.jpeg" }, (data) => {
+        $.post("/autotest/php/photo_upload.php", { url: app.domain, header: app.accounts[1].token, photo: "download.jpeg" }, (data) => {
             app.log("Успешная загрузка фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -575,7 +576,7 @@ app.upload_success = async function () {
 app.edit_method = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Валидация метода на изменение фотографии.", "Отправка запроса");
-        $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0] }, (data) => {
+        $.post("/autotest/php/photo_edit.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0] }, (data) => {
             app.log("Валидация метода на изменение фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -610,7 +611,7 @@ app.edit_method = async function () {
 app.edit_noaccess = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Редактирование фотографии другого пользователя.", "Отправка запроса");
-        $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[2].token, id: app.photos[0], photo: { "_method": "patch" } }, (data) => {
+        $.post("/autotest/php/photo_edit.php", { url: app.domain, header: app.accounts[2].token, id: app.photos[0], photo: { "_method": "patch" } }, (data) => {
             app.log("Валидация метода на изменение фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -645,7 +646,7 @@ app.edit_noaccess = async function () {
 app.edit_success = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Успешное редактирование фотографии.", "Отправка запроса");
-        $.post("/php/photo_edit.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0], 
+        $.post("/autotest/php/photo_edit.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[2], 
             photo: { 
                 "_method": "patch", 
                 "name": "Kurgan2020", 
@@ -655,7 +656,7 @@ app.edit_success = async function () {
             app.log("Успешное редактирование фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
-            if(data.code != 201) success = false;
+            if(data.code != 200) success = false;
 
             // Проверка структуры
             for(var i in data.response) if(i != "id" && i != "name" && i != "url") status = false;
@@ -674,7 +675,6 @@ app.edit_success = async function () {
                 <td class="text-${ message_notify } font-weight-bold">${ message }</td>
             </tr>`);
 
-            app.photos_get();
             app.log("Успешное редактирование фотографии. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);
         }).fail(() => {
@@ -688,7 +688,7 @@ app.edit_success = async function () {
 app.photos_get = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Получение всех фотографий.", "Отправка запроса");
-        $.post("/php/photo_get.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0], photo: { "_method": "patch" } }, (data) => {
+        $.post("/autotest/php/photo_get.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0], photo: { "_method": "patch" } }, (data) => {
             app.log("Получение всех фотографий. ", "Обработка запроса");
             // Проверка структуры
             $('.photoget').html("");
@@ -713,7 +713,7 @@ app.photos_get = async function () {
 app.delete_noaccess = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Удаление чужой фотографии.", "Отправка запроса");
-        $.post("/php/photo_delete.php", { url: app.domain, header: app.accounts[2].token, id: app.photos[0] }, (data) => {
+        $.post("/autotest/php/photo_delete.php", { url: app.domain, header: app.accounts[2].token, id: app.photos[0] }, (data) => {
             app.log("Удаление чужой фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -748,7 +748,7 @@ app.delete_noaccess = async function () {
 app.delete_success = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Успешное удаление фотографии.", "Отправка запроса");
-        $.post("/php/photo_delete.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0] }, (data) => {
+        $.post("/autotest/php/photo_delete.php", { url: app.domain, header: app.accounts[1].token, id: app.photos[0] }, (data) => {
             app.log("Валидация успешное удаление фотографии.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -770,7 +770,6 @@ app.delete_success = async function () {
                 <td class="text-${ message_notify } font-weight-bold">${ message }</td>
             </tr>`);
 
-            app.photos_get();
             app.log("Валидация успешное удаление фотографии. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);
         }).fail(() => {
@@ -784,7 +783,7 @@ app.delete_success = async function () {
 app.sharing = async function () {
     return new Promise(function(resolve, reject) {
         app.log("Шаринг фотографии другому пользователю.", "Отправка запроса");
-        $.post("/php/photo_share.php", { url: app.domain, header: app.accounts[1].token, id: app.accounts[2].id, photos: app.photos }, (data) => {
+        $.post("/autotest/php/photo_share.php", { url: app.domain, header: app.accounts[1].token, id: app.accounts[2].id, photos: app.photos }, (data) => {
             app.log("Шаринг фотографии другому пользователю.", "Обработка запроса");
 
             let success = true, message_notify = "success", message = "Пройдено!";
@@ -799,7 +798,6 @@ app.sharing = async function () {
            // Проверка структуры
            for(var i in data.response) if(i != "existing_photos") status = false;
 
-            app.photos_get();
             app.log("Шаринг фотографии другому пользователю. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);
         }).fail(() => {
@@ -813,7 +811,7 @@ app.sharing = async function () {
 app.search = async function (value) {
     return new Promise(function(resolve, reject) {
         app.log("Поиск пользователей.", "Отправка запроса");
-        $.post("/php/user_search.php", { url: app.domain, header: app.accounts[1].token, search: value }, (data) => {
+        $.post("/autotest/php/user_search.php", { url: app.domain, header: app.accounts[1].token, search: value }, (data) => {
             app.log("Поиск пользователей.", "Обработка запроса");
             app.log("Поиск пользователей. код ответа " + data.code, JSON.stringify(data.response));
             setTimeout(() => resolve(true), 2000);

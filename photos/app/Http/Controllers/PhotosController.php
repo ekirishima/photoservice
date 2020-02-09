@@ -43,7 +43,7 @@ class PhotosController extends Controller
 
     // Удаление фотографии.
     public function edit($id, Request $r) {
-        if($r->isMethod('post')) return response()->json(['_method' => 'patch method required!'], 422);
+        if($r->isMethod('post')) return response()->json([['_method' => 'patch method required!']], 422);
         $photo = Photo::find($id);
         if(!$photo) return response()->json("", 404);
         if($photo->owner_id != $this->user->id) return response()->json("", 403);
@@ -61,7 +61,7 @@ class PhotosController extends Controller
             'id' => $photo->id,
             'name' => $photo->name,
             'url' => $photo->url
-        ], 201);
+        ], 200);
     } 
 
     // Получение всех фотографий.
